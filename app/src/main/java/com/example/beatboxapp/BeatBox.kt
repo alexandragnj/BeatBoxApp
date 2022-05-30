@@ -9,19 +9,16 @@ class BeatBox(private val assets: AssetManager) {
 
     private fun loadSounds(): List<Sound> {
         assets.list(SOUNDS_FOLDER)?.let {
-            val sounds = mutableListOf<Sound>()
-            buildSoundsList(it, sounds)
-            return sounds
+            return buildSoundsList(it)
         }
         Log.e(TAG, "Could not list assets")
         return emptyList()
     }
 
-    private fun buildSoundsList(strings: Array<String>, sounds: MutableList<Sound>) {
-        strings.forEach { filename ->
+    private fun buildSoundsList(strings: Array<String>): List<Sound> {
+        return strings.map { filename ->
             val assetPath = "$SOUNDS_FOLDER/$filename"
-            val sound = Sound(assetPath)
-            sounds.add(sound)
+            Sound(assetPath)
         }
     }
 
