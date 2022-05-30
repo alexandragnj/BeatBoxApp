@@ -2,30 +2,27 @@ package com.example.beatboxapp
 
 import android.content.res.AssetManager
 import android.util.Log
-import java.lang.Exception
 
 class BeatBox(private val assets: AssetManager) {
 
-    val sounds: List<Sound>
-
-    init {
-        sounds = loadSounds()
-    }
+    val sounds: List<Sound> = loadSounds()
 
     private fun loadSounds(): List<Sound> {
-        val soundNames: Array<String>? = assets.list(SOUNDS_FOLDER)
-
-        if(soundNames==null){
-            Log.e(TAG, "Could not list assets")
-            return emptyList()
+        assets.list(SOUNDS_FOLDER)?.let {
+            val sounds = mutableListOf<Sound>()
+            buildSoundsList(it, sounds)
+            return sounds
         }
-        val sounds = mutableListOf<Sound>()
-        soundNames.forEach { filename ->
+        Log.e(TAG, "Could not list assets")
+        return emptyList()
+    }
+
+    private fun buildSoundsList(strings: Array<String>, sounds: MutableList<Sound>) {
+        strings.forEach { filename ->
             val assetPath = "$SOUNDS_FOLDER/$filename"
             val sound = Sound(assetPath)
             sounds.add(sound)
         }
-        return sounds
     }
 
     companion object {
