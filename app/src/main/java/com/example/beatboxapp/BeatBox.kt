@@ -8,16 +8,20 @@ import java.io.IOException
 
 class BeatBox(private val assets: AssetManager) {
 
-    val sounds: List<Sound> = loadSounds()
-
     private val soundPool = SoundPool.Builder()
         .setMaxStreams(MAX_SOUNDS)
         .build()
 
-    fun play(sound: Sound){
-        sound.soundId?.let{
+    val sounds: List<Sound> = loadSounds()
+
+    fun play(sound: Sound) {
+        sound.soundId?.let {
             soundPool.play(it, 1.0f, 1.0f, 1, 0, 1.0f)
         }
+    }
+
+    fun release() {
+        soundPool.release()
     }
 
     private fun loadSounds(): List<Sound> {
