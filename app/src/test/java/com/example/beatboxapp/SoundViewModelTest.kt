@@ -4,26 +4,35 @@ import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.mockito.junit.MockitoJUnitRunner
 
+
+@RunWith(MockitoJUnitRunner::class)
 class SoundViewModelTest {
 
+    @Mock
     private lateinit var beatBox: BeatBox
+
+    @Mock
     private lateinit var sound: Sound
     private lateinit var subject: SoundViewModel
 
     @Before
     fun setUp() {
-        beatBox = Mockito.mock(BeatBox::class.java)
-        sound = Sound("assetPath")
         subject = SoundViewModel(beatBox)
         subject.sound = sound
     }
 
     @Test
     fun exposesSoundNameAsTitle() {
-        assertThat(subject.title, CoreMatchers.`is`(sound.name))
+        `when`(sound.name).thenReturn("soundName")
+        assertThat(subject.title, CoreMatchers.`is`("soundName"))
     }
+
 
     @Test
     fun callsBeatBoxPlayOnButtonClicked() {
